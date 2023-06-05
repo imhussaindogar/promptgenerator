@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+    * {
+        box-sizing: border-box;
+    }
+    
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #222;
+        color: #fff;
+    }
+    
+    .container {
+        max-width: 500px;
+        margin: 0 auto;
+        background-color: #333;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    
+    .input-field {
+        width: 100%;
+        margin-bottom: 10px;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #555;
+        border-radius: 5px;
+        background-color: #444;
+        color: #fff;
+    }
+    
+    .textarea-field {
+        width: 100%;
+        height: 150px;
+        margin-bottom: 10px;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #555;
+        border-radius: 5px;
+        background-color: #444;
+        color: #fff;
+    }
+    
+    .copy-button {
+        display: inline-block;
+        padding: 8px 15px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+    }
+    
+    .copy-button:hover {
+        background-color: #45a049;
+    }
+</style>
+
+</head>
+<body>
+    <div class="container">
+        <input type="text" id="input1" class="input-field" placeholder="Input 1" value="what is the problem mentioned in this prompt? ">
+        <input type="text" id="input2" class="input-field" placeholder='Input 2 (Enclose in Double Quotes)'>
+        <textarea id="result" class="textarea-field" placeholder="Combined Result" readonly></textarea>
+        <button id="copyButton" class="copy-button">Copy</button>
+        <button id="copyButton2" class="copy-button" onclick="copyToClipboard2()">Copy 2</button>
+    </div>
+
+    <script>
+        // Function to handle copying the result to clipboard
+        function copyToClipboard() {
+            var result = document.getElementById("result");
+            result.select();
+            result.setSelectionRange(0, 99999); // For mobile devices
+
+            document.execCommand("copy");
+            
+            // Clear fields
+            document.getElementById("input2").value = "";
+            result.value = "";
+
+            // Focus back on input 2
+            document.getElementById("input2").focus();
+        }
+
+        // Function to combine the inputs and display the result
+        function combineInputs() {
+            var input1 = document.getElementById("input1").value;
+            var input2 = '"' + document.getElementById("input2").value + '"';
+            var result = input1 + " " + input2;
+            
+            // Store input1 value in local storage
+            localStorage.setItem("input1Value", input1);
+
+            // Set the result in the textarea
+            document.getElementById("result").value = result;
+        }
+
+        // Check if input1 value exists in local storage and set it
+        var input1Value = localStorage.getItem("input1Value");
+        if (input1Value) {
+            document.getElementById("input1").value = input1Value;
+        }
+
+        // Add event listeners
+        document.getElementById("input1").addEventListener("input", combineInputs);
+        document.getElementById("input2").addEventListener("input", combineInputs);
+        document.getElementById("copyButton").addEventListener("click", copyToClipboard);
+    </script>
+     <script>
+        function copyToClipboard2() {
+            const textToCopy = 'Now considering this problem, write an effective prompt for ChatGPT (only prompt)';
+            navigator.clipboard.writeText(textToCopy);
+            document.getElementById('copyButton2').innerText = 'Copied!';
+        }
+    </script>
+</body>
+</html>
